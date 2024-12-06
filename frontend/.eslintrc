@@ -2,11 +2,10 @@
   "root": true,
   "extends": [
     "next/core-web-vitals",
-    "plugin:eslint:recommended",
     "plugin:prettier/recommended",
     "plugin:react/recommended"
   ],
-  "plugins": ["react", "react-hooks"],
+  "plugins": ["react", "prettier", "react-hooks"],
   "env": {
     "browser": true,
     "node": true,
@@ -80,7 +79,7 @@
       { "max": 70, "skipBlankLines": true, "skipComments": true }
     ],
     "max-nested-callbacks": ["error", 3],
-    "max-params": ["error", 3],
+    "max-params": ["error", 4],
     "multiline-comment-style": ["error", "separate-lines"],
     "new-cap": "error",
     "no-alert": "error",
@@ -225,7 +224,7 @@
     "space-before-blocks": "error",
     "semi": ["error", "never"],
     // extra
-    "@next/next/no-html-link-for-pages": ["error", "./src/app"],
+    "@next/next/no-html-link-for-pages": ["error", "./src/pages"],
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/no-unescaped-entities": [
