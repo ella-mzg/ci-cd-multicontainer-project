@@ -8,7 +8,6 @@ const mockTasks = [
   { id: 1, title: "Write documentation", completed: false },
   { id: 2, title: "Set up issue board", completed: true }
 ]
-
 const HomePage = () => {
   const [tasks, setTasks] = useState(mockTasks)
   const [alert, setAlert] = useState(null)

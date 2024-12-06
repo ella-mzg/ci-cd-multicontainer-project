@@ -7,7 +7,6 @@ const variants = {
   success: "bg-green-100 text-green-900",
   warning: "bg-yellow-100 text-yellow-900"
 }
-
 const Alert = (props) => {
   const {
     as: Component = "div",
