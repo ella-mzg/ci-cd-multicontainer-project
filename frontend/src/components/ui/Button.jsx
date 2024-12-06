@@ -6,6 +6,7 @@ const base =
 const variants = {
   primary: "bg-blue-600 hover:bg-blue-700 active:bg-blue-800",
   secondary: "bg-gray-500 hover:bg-gray-600 active:bg-gray-700",
+  danger: "bg-red-600 hover:bg-red-700 active:bg-red-800",
   disabled: "bg-gray-300 text-gray-700 cursor-not-allowed"
 }
 
