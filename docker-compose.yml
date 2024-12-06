@@ -10,16 +10,40 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5432:5432"
+    networks:
+      - app_net
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "user", "-d", "mydb"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+  backend:
+    build:
+      context: ./backend
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    networks:
+      - app_net
+    healthcheck:
+      test: ["CMD", "python", "/app/healthcheck.py"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
 volumes:
-  db_data:
+  db_data: {}
+
+networks:
+  app_net:
+    driver: bridge
 
 secrets:
   postgres_password:
