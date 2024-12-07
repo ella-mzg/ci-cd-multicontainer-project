@@ -1,16 +1,20 @@
 import TaskForm from "@/components/TaskForm"
 import TaskList from "@/components/TaskList"
 import Alert from "@/components/ui/Alert"
-import { addTask, deleteTask, toggleTask } from "@/utils/taskHandlers"
-import { useState } from "react"
-
-const mockTasks = [
-  { id: 1, title: "Write documentation", completed: false },
-  { id: 2, title: "Set up issue board", completed: true }
-]
+import {
+  addTask,
+  deleteTask,
+  fetchTasks,
+  toggleTask
+} from "@/utils/taskHandlers"
+import { useEffect, useState } from "react"
 const HomePage = () => {
-  const [tasks, setTasks] = useState(mockTasks)
+  const [tasks, setTasks] = useState([])
   const [alert, setAlert] = useState(null)
+
+  useEffect(() => {
+    fetchTasks(setTasks, setAlert)
+  }, [])
 
   return (
     <div className="container mx-auto p-6">
@@ -24,7 +28,7 @@ const HomePage = () => {
         <TaskList
           tasks={tasks}
           onDelete={(taskId) => deleteTask(tasks, setTasks, setAlert, taskId)}
-          onToggle={(taskId) => toggleTask(tasks, setTasks, taskId)}
+          onToggle={(taskId) => toggleTask(tasks, setTasks, setAlert, taskId)}
         />
       </div>
     </div>
