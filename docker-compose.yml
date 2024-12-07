@@ -47,6 +47,11 @@ services:
       - "3000:3000"
     networks:
       - app_net
+    healthcheck:
+      test: ["CMD", "node", "/app/healthcheck.js"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
 volumes:
   db_data: {}
