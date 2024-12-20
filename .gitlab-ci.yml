@@ -3,15 +3,24 @@ stages:
 
 deploy_job:
   stage: deploy
+  tags:
+    - windows
+    - wsl
   image: alpine:latest
   before_script:
+    # Installer le client SSH
     - apk add --no-cache openssh-client
+    # Démarrer l'agent SSH
     - eval "$(ssh-agent -s)"
+    # Ajouter la clé privée SSH depuis la variable d'environnement
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    # Préparer le dossier SSH
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
+    # Désactiver la vérification stricte de l'hôte (optionnel mais recommandé pour l'automatisation)
     - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
   script:
-    - ssh $SSH_USER@$SSH_HOST 'ls -la /'
+    # Se connecter en SSH sur le port 2222
+    - ssh -p 2222 $SSH_USER@$SSH_HOST 'ls -la /'
   only:
     - main
