@@ -1,0 +1,26 @@
+stages:
+  - deploy
+
+deploy_job:
+  stage: deploy
+  # On utilise une petite image Alpine pour avoir un environnement minimal
+  image: alpine:latest
+  before_script:
+    # Installation du client SSH
+    - apk add --no-cache openssh-client
+    # Lance l’agent SSH
+    - eval "$(ssh-agent -s)"
+    # Ajoute la clé privée depuis la variable d'environnement
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    # Prépare le dossier SSH
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    # Désactive la vérification stricte de l’hôte SSH (optionnel)
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+  script:
+    # Exécution de commande(s) sur la VM distante
+    # Ici, on fait simplement un 'ls -la /' en guise de test
+    # Remplacez par vos commandes de déploiement réelles
+    - ssh $SSH_USER@$SSH_HOST 'ls -la /'
+  only:
+    - main
