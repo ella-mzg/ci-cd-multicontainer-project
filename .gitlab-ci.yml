@@ -21,6 +21,6 @@ deploy_job:
     # Exécution de commande(s) sur la VM distante
     # Ici, on fait simplement un 'ls -la /' en guise de test
     # Remplacez par vos commandes de déploiement réelles
-    - ssh $SSH_USER@$SSH_HOST 'ls -la /'
+    - ssh -p 2222 $SSH_USER@$SSH_HOST 'ls -la /'
   only:
     - main
