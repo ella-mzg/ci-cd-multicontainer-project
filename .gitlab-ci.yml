@@ -3,9 +3,6 @@ stages:
 
 deploy_job:
   stage: deploy
-  tags:
-    - windows
-    - wsl
   image: alpine:latest
   before_script:
     # Installer le client SSH
