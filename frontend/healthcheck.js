@@ -1,12 +1,8 @@
 const http = require("http")
 
-const options = {
-  hostname: "localhost",
-  port: 3000,
-  path: "/",
-  method: "GET"
-}
-
+const hostname = process.env.SERVICE_HOST
+const port = process.env.SERVICE_PORT
+const options = { hostname, port, path: "/", method: "GET" }
 const req = http.request(options, (res) => {
   if (res.statusCode === 200) {
     process.exit(0)
