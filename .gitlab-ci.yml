@@ -26,9 +26,10 @@ build_backend:
     - docker push $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_SLUG
     - docker push $CI_REGISTRY_IMAGE/backend:latest
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - backend/**/*
+    - when: always
+    # - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+    #   changes:
+    #     - backend/**/*
 
 build_frontend:
   stage: build
@@ -38,9 +39,10 @@ build_frontend:
     - docker push $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_SLUG
     - docker push $CI_REGISTRY_IMAGE/frontend:latest
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - frontend/**/*
+    - when: always
+    # - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+    #   changes:
+    #     - frontend/**/*
 
 test_backend:
   stage: test
