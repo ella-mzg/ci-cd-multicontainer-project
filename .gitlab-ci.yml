@@ -1,0 +1,63 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+
+services:
+  - docker:27.3.1-dind
+
+before_script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+build_backend:
+  stage: build
+  image: docker:27.3.1
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_SLUG backend/
+    - docker push $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_SLUG
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+    - changes:
+        - backend/**/*
+
+build_frontend:
+  stage: build
+  image: docker:27.3.1
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_SLUG frontend/
+    - docker push $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_SLUG
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+    - changes:
+        - frontend/**/*
+
+test_backend:
+  stage: test
+  image: $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_SLUG
+  script:
+    - echo "Run backend tests here"
+  rules:
+    - if: "$CI_COMMIT_BRANCH"
+    - changes:
+        - backend/**/*
+
+test_frontend:
+  stage: test
+  image: $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_SLUG
+  script:
+    - echo "Run frontend tests here"
+  rules:
+    - if: "$CI_COMMIT_BRANCH"
+    - changes:
+        - frontend/**/*
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploy services"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
