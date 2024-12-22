@@ -1,9 +1,0 @@
-test-ssh:
-  stage: test
-  script:
-    # Configurer la clé SSH
-    - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
-    # Tester la connexion SSH
-    - ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p ${DEPLOY_PORT:-22} $SSH_USER@$SSH_HOST "echo 'Connexion SSH réussie !'"
