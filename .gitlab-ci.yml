@@ -6,6 +6,8 @@ stages:
 variables:
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
+  BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend
+  FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend
 
 default:
   image: docker:27.3.1
@@ -19,32 +21,30 @@ default:
 build_backend:
   stage: build
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_SLUG backend/
-    - docker build -t $CI_REGISTRY_IMAGE/backend:latest backend/
-    - docker push $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_SLUG
-    - docker push $CI_REGISTRY_IMAGE/backend:latest
+    - docker build --no-cache --progress=plain -t $BACKEND_IMAGE:$CI_COMMIT_REF_SLUG backend/
+    - docker build -t $BACKEND_IMAGE:latest backend/
+    - docker push $BACKEND_IMAGE:$CI_COMMIT_REF_SLUG
+    - docker push $BACKEND_IMAGE:latest
   rules:
-    - when: always
-    # - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
-    #   changes:
-    #     - backend/**/*
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - backend/**/*
 
 build_frontend:
   stage: build
   script:
-    - docker build -t $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_SLUG frontend/
-    - docker build -t $CI_REGISTRY_IMAGE/frontend:latest frontend/
-    - docker push $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_SLUG
-    - docker push $CI_REGISTRY_IMAGE/frontend:latest
+    - docker build --no-cache --progress=plain -t $FRONTEND_IMAGE:$CI_COMMIT_REF_SLUG frontend/
+    - docker build -t $FRONTEND_IMAGE:latest frontend/
+    - docker push $FRONTEND_IMAGE:$CI_COMMIT_REF_SLUG
+    - docker push $FRONTEND_IMAGE:latest
   rules:
-    - when: always
-    # - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
-    #   changes:
-    #     - frontend/**/*
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - frontend/**/*
 
 test_backend:
   stage: test
-  image: $CI_REGISTRY_IMAGE/backend:$CI_COMMIT_REF_SLUG
+  image: $BACKEND_IMAGE:$CI_COMMIT_REF_SLUG
   script:
     - echo "Run backend tests here"
   rules:
@@ -54,7 +54,7 @@ test_backend:
 
 test_frontend:
   stage: test
-  image: $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_REF_SLUG
+  image: $FRONTEND_IMAGE:$CI_COMMIT_REF_SLUG
   script:
     - echo "Run frontend tests here"
   rules:
