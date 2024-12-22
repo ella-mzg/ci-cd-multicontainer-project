@@ -1,9 +1,15 @@
+stages:
+  - build
+  - test
+  - quality
+  - deploy
+
 test-ssh:
-  stage: test-ssh
+  stage: test  # Assigner à la stage "test"
   script:
     # Configurer SSH
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
-    # Tester la connexion SSH avec le port (si nécessaire)
+    # Tester la connexion SSH
     - ssh -o StrictHostKeyChecking=no -p ${DEPLOY_PORT:-22} $DEPLOY_USER@$DEPLOY_HOST "echo 'Connexion SSH réussie !'"
