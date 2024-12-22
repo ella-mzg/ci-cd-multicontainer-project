@@ -8,6 +8,7 @@ import {
   toggleTask
 } from "@/utils/taskHandlers"
 import { useEffect, useState } from "react"
+
 const HomePage = () => {
   const [tasks, setTasks] = useState([])
   const [alert, setAlert] = useState(null)

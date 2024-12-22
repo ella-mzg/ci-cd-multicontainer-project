@@ -1,9 +1,13 @@
+import os
 import sys
 import http.client as httplib
 
 def check_health():
     try:
-        conn = httplib.HTTPConnection("localhost", 5000)
+        conn = httplib.HTTPConnection(
+            os.getenv("SERVICE_HOST"),
+            int(os.getenv("SERVICE_PORT"))
+        )
         conn.request("HEAD", "/api/health")
         res = conn.getresponse()
         if res.status == 200:
