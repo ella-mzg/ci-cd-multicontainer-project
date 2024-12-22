@@ -1,26 +1,9 @@
-stages:
-  - deploy
-
-deploy_job:
-  stage: deploy
-  tags:
-    - windows
-    - wsl
-  image: alpine:latest
-  before_script:
-    # Installer le client SSH
-    - apk add --no-cache openssh-client
-    # Démarrer l'agent SSH
-    - eval "$(ssh-agent -s)"
-    # Ajouter la clé privée SSH depuis la variable d'environnement
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    # Préparer le dossier SSH
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    # Désactiver la vérification stricte de l'hôte (optionnel mais recommandé pour l'automatisation)
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+test-ssh:
+  stage: test
   script:
-    # Se connecter en SSH sur le port 2222
-    - ssh -p 2222 $SSH_USER@$SSH_HOST 'ls -la /'
-  only:
-    - main
+    # Configurer la clé SSH
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    # Tester la connexion SSH
+    - ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p ${DEPLOY_PORT:-22} $SSH_USER@$SSH_HOST "echo 'Connexion SSH réussie !'"
