@@ -1,0 +1,56 @@
+stages:
+  - build
+  - deploy
+  - pages
+
+# Variables globales
+variables:
+  DEPLOY_PATH: /var/www/html  # Répertoire sur la VM où seront déployés les fichiers
+  GIT_STRATEGY: fetch         # Stratégie pour GitLab CI/CD
+  GIT_SUBMODULE_STRATEGY: recursive
+
+# Étape de génération de la documentation
+build-docs:
+  stage: build
+  image: python:3.10
+  script:
+    # Installer les dépendances nécessaires pour MkDocs
+    - pip install -r requirements.txt
+    # Générer la documentation avec MkDocs
+    - mkdocs build
+  artifacts:
+    paths:
+      - site/  # Sauvegarder les fichiers générés pour les étapes suivantes
+
+# Étape de déploiement via SSH
+deploy-docs:
+  stage: deploy
+  image: alpine:latest
+  before_script:
+    # Configurer la clé SSH pour se connecter à la VM
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - apk add --no-cache openssh
+  script:
+    # Copier les fichiers générés dans le répertoire distant via SSH
+    - scp -r site/* $SSH_USER@$SSH_HOST:$DEPLOY_PATH
+  only:
+    - main  # Déployer uniquement pour les commits sur la branche principale
+  environment:
+    name: production  # Nom de l'environnement cible
+
+# Étape de publication sur GitLab Pages
+pages:
+  stage: pages
+  image: python:3.10
+  script:
+    # Installer les dépendances nécessaires pour MkDocs
+    - pip install -r requirements.txt
+    # Générer la documentation pour GitLab Pages
+    - mkdocs build --site-dir public
+  artifacts:
+    paths:
+      - public/  # Dossier attendu par GitLab Pages
+  only:
+    - main  # Publier uniquement pour les commits sur la branche principale

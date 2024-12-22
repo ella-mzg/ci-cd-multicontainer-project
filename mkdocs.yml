@@ -1,0 +1,6 @@
+site_name: Documentation de Projet
+theme:
+  name: material
+nav:
+  - Accueil: index.md
+  - Déploiement : deployment.md
