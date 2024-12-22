@@ -62,3 +62,4 @@ deploy:
     - echo "Deploy services"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
+# Trigger pipeline
