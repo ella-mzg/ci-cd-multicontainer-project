@@ -4,8 +4,8 @@ stages:
   - sast
   - deploy
 
-include:
-  - template: Jobs/SAST.gitlab-ci.yml
+# include:
+#   - template: Jobs/SAST.gitlab-ci.yml
 
 variables:
   DOCKER_DRIVER: overlay2
@@ -87,7 +87,7 @@ sast:
   stage: sast
   image: registry.gitlab.com/security-products/semgrep:5
   script:
-    - /analyzer run --verbose
+    - /analyzer run
   artifacts:
     reports:
       sast: gl-sast-report.json
