@@ -87,7 +87,7 @@ sast:
   stage: sast
   image: registry.gitlab.com/security-products/semgrep:5
   script:
-    - /analyzer run
+    - /analyzer run --verbose
   artifacts:
     reports:
       sast: gl-sast-report.json
