@@ -47,6 +47,13 @@ build_frontend:
 test_backend:
   stage: test
   image: python:3.12-slim
+  services:
+    - postgres:latest
+  variables:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: password
+    POSTGRES_DB: mydb
+    SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://postgres:password@postgres:5432/mydb
   script:
     - pip install --no-cache-dir -r backend/requirements.txt
     - pytest backend/tests/
@@ -54,7 +61,6 @@ test_backend:
     - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
         - backend/**/*
-        - backend/tests/**/*
 
 test_frontend:
   stage: test
