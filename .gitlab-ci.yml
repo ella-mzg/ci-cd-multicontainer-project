@@ -83,6 +83,16 @@ test_frontend:
       changes:
         - frontend/**/*
 
+sast:
+  stage: sast
+  variables:
+    SAST_DISABLED: "false"
+    SAST_EXIT_CODE: "1"
+    SAST_SEVERITY_LEVEL: "info"
+    SAST_CONFIDENCE_LEVEL: "low"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+
 deploy:
   stage: deploy
   script:
