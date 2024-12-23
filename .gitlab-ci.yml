@@ -1,7 +1,11 @@
 stages:
   - build
   - test
+  - sast
   - deploy
+
+include:
+  - template: Jobs/SAST.gitlab-ci.yml
 
 variables:
   DOCKER_DRIVER: overlay2
