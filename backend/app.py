@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 db.init_app(app)
-CORS(app, resources={r"/*": {"origins": os.getenv("FRONTEND_URL")}})
+CORS(app, resources={r"/*": {"origins": os.getenv("FRONTEND_URL", "*")}})
 
 app.register_blueprint(task_blueprint)
 
