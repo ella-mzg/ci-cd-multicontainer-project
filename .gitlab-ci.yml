@@ -19,6 +19,9 @@ default:
 
 build_backend:
   stage: build
+  image: docker:27.3.1
+  services:
+    - docker:27.3.1-dind
   before_script:
     - docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
@@ -31,28 +34,34 @@ build_backend:
       changes:
         - backend/**/*
 
-build_db:
+build_frontend:
   stage: build
-  image: postgres:latest
+  image: docker:27.3.1
+  services:
+    - docker:27.3.1-dind
+  before_script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
   script:
-    - echo "Initializing database..."
-    - docker run -d --name test-db -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB postgres:latest
-    - sleep 5
-    - docker exec test-db pg_isready -U $POSTGRES_USER -d $POSTGRES_DB
-    - docker commit test-db initialized-test-db:latest
-  artifacts:
-    paths:
-      - initialized-test-db.tar
-    expire_in: 1 hour
+    - docker build --no-cache --progress=plain -t $FRONTEND_IMAGE:$CI_COMMIT_REF_SLUG frontend/
+    - docker build -t $FRONTEND_IMAGE:latest frontend/
+    - docker push $FRONTEND_IMAGE:$CI_COMMIT_REF_SLUG
+    - docker push $FRONTEND_IMAGE:latest
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - frontend/**/*
 
 test_backend:
   stage: test
   image: python:3.12-slim
   services:
-    - name: initialized-test-db:latest
+    - name: postgres:latest
       alias: postgres
+  variables:
+    POSTGRES_HOST: postgres
   script:
     - pip install --no-cache-dir -r backend/requirements.txt
+    - until pg_isready -h $POSTGRES_HOST -U $POSTGRES_USER -d $POSTGRES_DB; do sleep 1; done
     - pytest backend/tests/
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
