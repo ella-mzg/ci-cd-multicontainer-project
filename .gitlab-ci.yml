@@ -8,10 +8,6 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend
   FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: password
-  POSTGRES_DB: mydb
-  SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://postgres:password@postgres:5432/mydb
 
 default:
   tags:
@@ -53,14 +49,18 @@ build_frontend:
 
 test_backend:
   stage: test
-  image: python:3.12-slim
+  image: $BACKEND_IMAGE:latest
   services:
     - name: postgres:latest
       alias: postgres
   variables:
     POSTGRES_HOST: postgres
+    POSTGRES_USER: user
+    POSTGRES_PASSWORD: password
+    POSTGRES_DB: mydb
+    SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/$POSTGRES_DB
   script:
-    - pip install --no-cache-dir -r backend/requirements.txt
+    - apt-get update && apt-get install -y postgresql-client
     - until pg_isready -h $POSTGRES_HOST -U $POSTGRES_USER -d $POSTGRES_DB; do sleep 1; done
     - pytest backend/tests/
   rules:
