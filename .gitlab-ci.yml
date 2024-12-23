@@ -19,7 +19,7 @@ default:
 build_backend:
   stage: build
   before_script:
-    - docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
   script:
     - docker build --no-cache --progress=plain -t $BACKEND_IMAGE:$CI_COMMIT_REF_SLUG backend/
     - docker build -t $BACKEND_IMAGE:latest backend/
@@ -33,7 +33,7 @@ build_backend:
 build_frontend:
   stage: build
   before_script:
-    - docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
   script:
     - docker build --no-cache --progress=plain -t $FRONTEND_IMAGE:$CI_COMMIT_REF_SLUG frontend/
     - docker build -t $FRONTEND_IMAGE:latest frontend/
@@ -54,6 +54,7 @@ test_backend:
     - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
         - backend/**/*
+        - backend/tests/**/*
 
 test_frontend:
   stage: test
