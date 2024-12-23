@@ -87,7 +87,7 @@ sast:
   stage: sast
   image: registry.gitlab.com/security-products/semgrep:5
   script:
-    - /analyzer run --ruleset .gitlab/sast-ruleset.toml
+    - /analyzer run
     - echo "Analyzer failed with exit code $?"
   artifacts:
     reports:
