@@ -13,13 +13,13 @@ default:
   image: docker:27.3.1
   services:
     - docker:27.3.1-dind
-  before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   tags:
     - multi-service
 
 build_backend:
   stage: build
+  before_script:
+    - docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - docker build --no-cache --progress=plain -t $BACKEND_IMAGE:$CI_COMMIT_REF_SLUG backend/
     - docker build -t $BACKEND_IMAGE:latest backend/
@@ -32,6 +32,8 @@ build_backend:
 
 build_frontend:
   stage: build
+  before_script:
+    - docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - docker build --no-cache --progress=plain -t $FRONTEND_IMAGE:$CI_COMMIT_REF_SLUG frontend/
     - docker build -t $FRONTEND_IMAGE:latest frontend/
@@ -44,10 +46,10 @@ build_frontend:
 
 test_backend:
   stage: test
-  image: $BACKEND_IMAGE:$CI_COMMIT_REF_SLUG
+  image: python:3.12-slim
   script:
-    - pip install --no-cache-dir -r requirements.txt
-    - pytest tests/
+    - pip install --no-cache-dir -r backend/requirements.txt
+    - pytest backend/tests/
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
