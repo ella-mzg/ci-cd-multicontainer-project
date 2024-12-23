@@ -46,9 +46,10 @@ test_backend:
   stage: test
   image: $BACKEND_IMAGE:$CI_COMMIT_REF_SLUG
   script:
-    - echo "Run backend tests here"
+    - pip install --no-cache-dir -r requirements.txt
+    - pytest tests/
   rules:
-    - if: "$CI_COMMIT_BRANCH"
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
         - backend/**/*
 
