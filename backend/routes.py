@@ -23,7 +23,7 @@ def create_task():
 @task_blueprint.route("/api/tasks/<int:task_id>", methods=["PUT"])
 def update_task(task_id):
     data = request.get_json()
-    task = Task.query.get(task_id)
+    task = db.session.get(Task, task_id)
     if not task:
         return jsonify({"error": "Task not found"}), 404
     task.title = data.get("title", task.title)
@@ -33,7 +33,7 @@ def update_task(task_id):
 
 @task_blueprint.route("/api/tasks/<int:task_id>", methods=["DELETE"])
 def delete_task(task_id):
-    task = Task.query.get(task_id)
+    task = db.session.get(Task, task_id)
     if not task:
         return jsonify({"error": "Task not found"}), 404
     db.session.delete(task)

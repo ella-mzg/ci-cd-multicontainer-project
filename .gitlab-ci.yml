@@ -8,18 +8,22 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   BACKEND_IMAGE: $CI_REGISTRY_IMAGE/backend
   FRONTEND_IMAGE: $CI_REGISTRY_IMAGE/frontend
+  POSTGRES_USER: user
+  POSTGRES_PASSWORD: password
+  POSTGRES_DB: mydb
+  SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/$POSTGRES_DB
 
 default:
-  image: docker:27.3.1
-  services:
-    - docker:27.3.1-dind
-  before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   tags:
     - multi-service
 
 build_backend:
   stage: build
+  image: docker:27.3.1
+  services:
+    - docker:27.3.1-dind
+  before_script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
   script:
     - docker build --no-cache --progress=plain -t $BACKEND_IMAGE:$CI_COMMIT_REF_SLUG backend/
     - docker build -t $BACKEND_IMAGE:latest backend/
@@ -32,6 +36,11 @@ build_backend:
 
 build_frontend:
   stage: build
+  image: docker:27.3.1
+  services:
+    - docker:27.3.1-dind
+  before_script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
   script:
     - docker build --no-cache --progress=plain -t $FRONTEND_IMAGE:$CI_COMMIT_REF_SLUG frontend/
     - docker build -t $FRONTEND_IMAGE:latest frontend/
@@ -44,13 +53,21 @@ build_frontend:
 
 test_backend:
   stage: test
-  image: $BACKEND_IMAGE:$CI_COMMIT_REF_SLUG
+  image: $BACKEND_IMAGE:latest
+  services:
+    - name: postgres:latest
+      alias: postgres
+  variables:
+    POSTGRES_HOST: postgres
   script:
-    - echo "Run backend tests here"
+    - apt-get update && apt-get install -y postgresql-client
+    - until pg_isready -h $POSTGRES_HOST -U $POSTGRES_USER -d $POSTGRES_DB; do sleep 1; done
+    - pytest backend/tests/
   rules:
-    - if: "$CI_COMMIT_BRANCH"
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
         - backend/**/*
+        - database/**/*
 
 test_frontend:
   stage: test
