@@ -1,11 +1,5 @@
 import axios from "axios"
 
-const apiKey = "123456"
-axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/tasks`, {
-  httpsAgent: new (require("https").Agent)({
-    rejectUnauthorized: false
-  })
-})
 export const fetchTasks = async (setTasks, setAlert) => {
   try {
     const { data } = await axios.get(
