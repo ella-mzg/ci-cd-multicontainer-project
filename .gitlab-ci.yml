@@ -85,6 +85,15 @@ test_frontend:
 
 sast:
   stage: sast
+  image: registry.gitlab.com/security-products/semgrep:5
+  script:
+    - /analyzer run
+  artifacts:
+    reports:
+      sast: gl-sast-report.json
+    paths:
+      - gl-sast-report.json
+    when: always
   variables:
     SAST_DISABLED: "false"
     SAST_EXIT_CODE: "1"
