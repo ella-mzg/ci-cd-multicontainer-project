@@ -88,6 +88,7 @@ sast:
   image: registry.gitlab.com/security-products/semgrep:5
   script:
     - /analyzer run
+    - if grep -q '"severity":' gl-sast-report.json; then echo "Vulnerabilities detected!"; exit 1; fi
   artifacts:
     reports:
       sast: gl-sast-report.json
@@ -100,7 +101,6 @@ sast:
     SAST_SEVERITY_LEVEL: "low"
     SAST_CONFIDENCE_LEVEL: "low"
   rules:
-    - allow_failure: false
     - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
 
 deploy:
