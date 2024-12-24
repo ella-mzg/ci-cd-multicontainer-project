@@ -80,7 +80,7 @@ test_frontend:
   script:
     - cd frontend/
     - npm install
-    - npx test
+    - npm test
   rules:
     - changes:
         - frontend/**/*
