@@ -5,7 +5,7 @@ stages:
   - deploy
 
 include:
-  - template: Jobs/SAST.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
 
 variables:
   DOCKER_DRIVER: overlay2
@@ -88,7 +88,6 @@ sast:
   image: registry.gitlab.com/security-products/semgrep:5
   script:
     - /analyzer run
-    - echo "Analyzer failed with exit code $?"
   artifacts:
     reports:
       sast: gl-sast-report.json
