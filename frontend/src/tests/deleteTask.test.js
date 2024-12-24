@@ -59,4 +59,3 @@ test("deleteTask sets alert on API error", async () => {
   jest.runAllTimers()
   expect(setAlert).toHaveBeenCalledWith(null)
 })
-//

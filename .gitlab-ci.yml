@@ -79,6 +79,7 @@ test_frontend:
     NEXT_PUBLIC_BACKEND_URL: http://mock-backend
   script:
     - cd frontend/
+    - npm install
     - npx test
   rules:
     - changes:
