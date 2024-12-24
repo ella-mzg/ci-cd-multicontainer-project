@@ -78,6 +78,8 @@ test_frontend:
   variables:
     NEXT_PUBLIC_BACKEND_URL: http://mock-backend
   script:
+    - ls
+    - cd app/
     - npm test
   rules:
     - changes:
