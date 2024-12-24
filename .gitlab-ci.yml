@@ -89,12 +89,9 @@ sast:
   artifacts:
     reports:
       sast: gl-sast-report.json
-    paths:
-      - gl-sast-report.json
-    when: always
   variables:
-    SAST_SEVERITY_LEVEL: "high"
-    SAST_CONFIDENCE_LEVEL: "high"
+    SAST_SEVERITY_LEVEL: "low"
+    SAST_CONFIDENCE_LEVEL: "low"
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
 
