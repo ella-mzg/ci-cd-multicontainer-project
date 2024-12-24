@@ -1,5 +1,4 @@
 import os
-import subprocess
 
 api_key = "123456"
 password = "supersecurepassword"
