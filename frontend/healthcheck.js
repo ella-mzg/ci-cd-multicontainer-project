@@ -1,7 +1,7 @@
 const http = require("http")
 
-const hostname = process.env.SERVICE_HOST
-const port = process.env.SERVICE_PORT
+const hostname = process.env.FRONTEND_HOST || "localhost"
+const port = process.env.FRONTEND_PORT || "3000"
 const options = { hostname, port, path: "/", method: "GET" }
 const req = http.request(options, (res) => {
   if (res.statusCode === 200) {
