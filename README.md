@@ -1,93 +1,213 @@
 # CI-CD Multicontainer Project
 
+## Project Description
 
+This is a simple TODO app that allows users to manage their tasks. Users can:
 
-## Getting started
+- Add new tasks to their to-do list.
+- Mark tasks as completed or toggle their completion status.
+- Delete tasks they no longer need.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Architecture Overview
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+The app follows a three-tier architecture, consisting of a **frontend**, **backend**, and **database**.
 
-## Add your files
+### Components
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+---
 
+1. **Frontend**
+
+   - Built with **Next.js**, a React-based framework for building user interfaces.
+   - Handles user interactions and communicates with the backend via RESTful APIs.
+   - Provides features such as task creation, deletion, and toggling completion.
+
+2. **Backend**
+
+   - Developed using **Flask**, a lightweight Python framework.
+   - Serves as the API layer, managing business logic and database interactions.
+   - Exposes RESTful endpoints for CRUD operations:
+     - `GET /api/tasks`: Retrieve all tasks.
+     - `POST /api/tasks`: Create a new task.
+     - `PUT /api/tasks/<task_id>`: Update a task (e.g., toggle completion).
+     - `DELETE /api/tasks/<task_id>`: Delete a task.
+
+3. **Database**
+   - Uses **PostgreSQL** for persistent data storage.
+   - Stores task information, including:
+     - `id` (integer): Unique identifier.
+     - `title` (string): Description of the task.
+     - `completed` (boolean): Task status.
+
+### Communication Flow
+
+---
+
+1. **User Interaction**:
+
+   - Users interact with the frontend to perform actions like adding or toggling tasks.
+
+2. **API Requests**:
+
+   - The frontend sends HTTP requests to the backend Flask API.
+
+3. **Database Operations**:
+
+   - The backend performs CRUD operations on the PostgreSQL database.
+
+4. **Response**:
+   - The backend returns JSON responses, which the frontend uses to update the user interface.
+
+### Why This Stack?
+
+---
+
+This stack was chosen for its efficiency, reliability, and compatibility with my skill set. Additionally, the project provided an opportunity to combine technologies I’m familiar with (Python, Next.js, and PostgreSQL) while tackling new challenges, such as CI/CD pipelines and SAST integration.
+
+## Running the Application
+
+### Prerequisites
+
+---
+
+- **Python** with `pip`
+- **Node.js** with `npm` or `yarn`
+- **PostgreSQL**
+
+Note: The application has been tested with Node.js v20.10, Python v3.12, and PostgreSQL v16.1. Any recent version should work.
+
+**Create a .env file in the root directory with the following variables:**
+
+```bash
+BACKEND_HOST=localhost
+BACKEND_PORT=5000
+
+FRONTEND_HOST=localhost
+FRONTEND_PORT=3000
+
+NEXT_PUBLIC_BACKEND_URL=http://localhost:5000
+DATABASE_URL=postgresql+psycopg2://user:password@localhost:5432/mydb
+FRONTEND_URL=http://localhost:3000
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/ella.mzg/ci-cd-multicontainer-project.git
-git branch -M main
-git push -uf origin main
+
+### With Docker Compose
+
+- **Start the containers**:
+
+```bash
+docker compose up -d
 ```
 
-## Integrate with your tools
+- **Stop the Containers**:
 
-- [ ] [Set up project integrations](https://gitlab.com/ella.mzg/ci-cd-multicontainer-project/-/settings/integrations)
+```bash
+docker compose down
+```
 
-## Collaborate with your team
+- **Rebuild Services (if needed)**:
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+```bash
+docker compose up --build -d
+```
 
-## Test and Deploy
+### Manually
 
-Use the built-in continuous integration in GitLab.
+---
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+#### Database Setup
 
-***
+---
 
-# Editing this README
+**1. Create and seed the database**
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+- **Using psql**:
 
-## Suggestions for a good README
+  ```bash
+  psql -U <user> -d <db_name> -f database/init.sql
+  ```
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+- **Using pgAdmin or other tools**:
 
-## Name
-Choose a self-explaining name for your project.
+  Create the database through the GUI and paste the contents of init.sql.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+#### Backend Setup
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+---
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+**1. Navigate to the Backend Directory**
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+```bash
+cd backend
+```
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+**2. Create a virtual environment**
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+```bash
+  python -m venv venv
+```
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+**3. Activate it**
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+- **On Windows**:
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+  ```bash
+  .\venv\Scripts\Activate.ps1 # For PowerShell
+  .\venv\Scripts\activate # For cmd
+  ```
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+- **On Linux or MacOS**:
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+  ```bash
+  source venv/bin/activate
+  ```
 
-## License
-For open source projects, say how it is licensed.
+**4. Install the dependencies**
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+```bash
+pip install -r requirements.txt
+```
+
+**5. Start the Backend**
+
+```bash
+python app.py
+```
+
+#### Frontend Setup
+
+---
+
+**1. Open another terminal and navigate to the frontend directory**
+
+```bash
+cd frontend
+```
+
+**2. Install Dependencies**
+
+```bash
+npm i # Or yarn
+```
+
+**3. Start the Frontend**
+
+```bash
+npm run dev # Or yarn dev
+```
+
+### Access the Application
+
+---
+
+Open your browser and visit http://localhost:3000 (or the URL you set in your environment variables).
+
+## Team Roles and Contributions
+
+1. **Ella**
+
+   - **Role**: Development, CI/CD, Documentation, Project Management.
+   - **Contributions**:
+     - Managed the project's issue board.
+     - Designed, developed, and dockerized the app.
+     - Set up the project’s architecture and CI/CD pipeline.
+     - Authored the project documentation.
