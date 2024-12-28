@@ -1,15 +1,13 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
+
 class Config:
     try:
-        if os.path.exists('/run/secrets/postgres_password'):
-            with open('/run/secrets/postgres_password') as f:
-                POSTGRES_PASSWORD = f.read().strip()
-            DATABASE_URL = f"postgresql+psycopg2://user:{POSTGRES_PASSWORD}@db:5432/mydb"
-        else:
-            DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///:memory:")
+        DATABASE_URL = os.getenv("DATABASE_URL")
+        if not DATABASE_URL:
+            raise ValueError("DATABASE_URL is not set or is empty")
     except Exception as e:
         print(f"Error loading database configuration: {e}")
         DATABASE_URL = "sqlite:///:memory:"
