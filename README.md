@@ -1,5 +1,11 @@
 # CI-CD Multicontainer Project
 
+## Hosted Documentation
+
+The complete project documentation is hosted on GitLab Pages. You can access it here:
+
+[CI/CD Multicontainer Project Documentation](https://ella.mzg.gitlab.io/ci-cd-multicontainer-project)
+
 ## Project Description
 
 This is a simple TODO app that allows users to manage their tasks. Users can:
