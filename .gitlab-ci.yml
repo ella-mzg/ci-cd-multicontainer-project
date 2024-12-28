@@ -104,6 +104,10 @@ sast:
     SAST_CONFIDENCE_LEVEL: "low"
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+    - changes:
+        - backend/**/*
+        - frontend/**/*
+        - database/**/*
 
 # ----------- DEPLOY JOB -----------
 deploy:
