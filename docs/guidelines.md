@@ -36,7 +36,7 @@
   - `fix/` for bug fixes
   - `docs/` for documentation changes
   - `ci-cd/` for changes related to CI/CD pipelines
-- **Use the format**: `prefix/issue-number-short-title`
+- **Use the format**: `<prefix>/<issue-number>-<short-title>`
 - **Keep your branch up to date** with the latest changes from `main`:
   ```bash
   git pull origin main
@@ -44,6 +44,18 @@
   **Examples:**
 - `docs/5-usage-instructions`
 - `fix/8-database-connection-error`
+
+---
+
+### **4. Merge Requests**
+
+- The merge request title will become the commit message after squashing, so ensure it is clear and descriptive.
+- **Use the format**: `<prefix>: <short description>`.
+
+**Examples**:
+
+- `docs: add usage instructions in README`
+- `fix: resolve database connection issue`
 
 ---
 
@@ -101,5 +113,6 @@
 
 ### **7. Merge and Close**
 
-- After approval, merge the MR into `main`.
+- After approval, squash commits into a single meaningful commit during the merge to keep the history clean.
+- Merge the MR into `main`.
 - Move the issue to the **Closed** column if necessary.
