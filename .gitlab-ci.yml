@@ -98,7 +98,6 @@ sast:
       sast: gl-sast-report.json
     paths:
       - gl-sast-report.json
-    when: always
   variables:
     SAST_SEVERITY_LEVEL: "low"
     SAST_CONFIDENCE_LEVEL: "low"
@@ -117,6 +116,7 @@ pages:
     - pip install --no-cache-dir mkdocs mkdocs-material
   script:
     - mkdocs build
+    - ls -l site
   artifacts:
     paths:
       - site
