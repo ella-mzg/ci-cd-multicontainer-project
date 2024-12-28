@@ -1,0 +1,119 @@
+{
+  "version": "15.1.4",
+  "vulnerabilities": [
+    {
+      "id": "9e5b94fafba969cc14ac8cf5819de4e42c1fb5509f4edc0359673cc5ca5af678",
+      "category": "sast",
+      "name": "Improper neutralization of special elements used in an OS Command ('OS Command Injection')",
+      "description": "Starting a process with a shell; seems safe, but may be changed in the future, consider\nrewriting without shell\n",
+      "cve": "semgrep_id:bandit.B605:8:8",
+      "severity": "High",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "backend/test_sast.py",
+        "start_line": 8
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B605",
+          "value": "bandit.B605",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B605"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-78",
+          "value": "78",
+          "url": "https://cwe.mitre.org/data/definitions/78.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A03:2021 - Injection",
+          "value": "A03:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A1:2017 - Injection",
+          "value": "A1:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B605",
+          "value": "B605"
+        }
+      ]
+    },
+    {
+      "id": "abe6236772ad9ba27ad30c7501828f391fc2da7eb6cf682bf15a1dbc68e30835",
+      "category": "sast",
+      "name": "Improper neutralization of special elements used in an OS Command ('OS Command Injection')",
+      "description": "Starting a process with a shell; seems safe, but may be changed in the future, consider\nrewriting without shell\n",
+      "cve": "semgrep_id:bandit.B607:8:8",
+      "severity": "High",
+      "scanner": {
+        "id": "semgrep",
+        "name": "Semgrep"
+      },
+      "location": {
+        "file": "backend/test_sast.py",
+        "start_line": 8
+      },
+      "identifiers": [
+        {
+          "type": "semgrep_id",
+          "name": "bandit.B607",
+          "value": "bandit.B607",
+          "url": "https://semgrep.dev/r/gitlab.bandit.B607"
+        },
+        {
+          "type": "cwe",
+          "name": "CWE-78",
+          "value": "78",
+          "url": "https://cwe.mitre.org/data/definitions/78.html"
+        },
+        {
+          "type": "owasp",
+          "name": "A03:2021 - Injection",
+          "value": "A03:2021"
+        },
+        {
+          "type": "owasp",
+          "name": "A1:2017 - Injection",
+          "value": "A1:2017"
+        },
+        {
+          "type": "bandit_test_id",
+          "name": "Bandit Test ID B607",
+          "value": "B607"
+        }
+      ]
+    }
+  ],
+  "scan": {
+    "analyzer": {
+      "id": "semgrep",
+      "name": "Semgrep",
+      "url": "https://gitlab.com/gitlab-org/security-products/analyzers/semgrep",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "5.25.0"
+    },
+    "scanner": {
+      "id": "semgrep",
+      "name": "Semgrep",
+      "url": "https://github.com/returntocorp/semgrep",
+      "vendor": {
+        "name": "GitLab"
+      },
+      "version": "1.74.0"
+    },
+    "type": "sast",
+    "start_time": "2024-12-24T00:29:50",
+    "end_time": "2024-12-24T00:30:08",
+    "status": "success"
+  }
+}
