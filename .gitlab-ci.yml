@@ -103,11 +103,11 @@ sast:
     SAST_SEVERITY_LEVEL: "low"
     SAST_CONFIDENCE_LEVEL: "low"
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
     - changes:
         - backend/**/*
         - frontend/**/*
         - database/**/*
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
 
 # ----------- DEPLOY JOBS -----------
 pages:
@@ -117,10 +117,9 @@ pages:
     - pip install --no-cache-dir mkdocs mkdocs-material
   script:
     - mkdocs build
-    - mv site/ ../public/
   artifacts:
     paths:
-      - public
+      - site
     expire_in: 1 week
   rules:
     - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
