@@ -1,0 +1,23 @@
+site_name: CI/CD Multicontainer Project
+site_description: Documentation for the CI/CD Multicontainer Project.
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: cyan
+nav:
+  - Home: index.md
+  - Overview:
+      - API Documentation: api.md
+      - Architecture: architecture.md
+  - Project Report:
+      - Project Management:
+          - Team Workflow Guidelines: guidelines.md
+          - Organization: organization.md
+      - Challenges and Solutions: challenges.md
+      - GitLab and SAST:
+          - Critical Analysis: gitlab-analysis.md
+          - SAST Report: gl-sast-report.json
+      - Future Improvements: improvements.md
+repo_url: https://gitlab.com/ella.mzg/ci-cd-multicontainer-project
+repo_name: CI/CD Multicontainer Project
