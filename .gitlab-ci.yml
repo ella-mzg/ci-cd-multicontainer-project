@@ -116,7 +116,6 @@ pages:
   before_script:
     - pip install --no-cache-dir mkdocs mkdocs-material
   script:
-    - cd docs/
     - mkdocs build
     - mv site/ ../public/
   artifacts:

@@ -10,7 +10,14 @@ nav:
   - Overview:
       - API Documentation: api.md
       - Architecture: architecture.md
-  - Guidelines: guidelines.md
-  - Project Report: project-report.md
+  - Project Report:
+      - Project Management:
+          - Team Workflow Guidelines: guidelines.md
+          - Organization: organization.md
+      - Challenges and Solutions: challenges.md
+      - GitLab and SAST:
+          - Critical Analysis: gitlab-analysis.md
+          - SAST Report: gl-sast-report.json
+      - Future Improvements: improvements.md
 repo_url: https://gitlab.com/ella.mzg/ci-cd-multicontainer-project
 repo_name: CI/CD Multicontainer Project
