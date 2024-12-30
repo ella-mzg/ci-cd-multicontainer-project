@@ -125,7 +125,6 @@ pages:
   rules:
     - changes:
         - docs/**
-    # - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
 
 deploy:
   stage: deploy
