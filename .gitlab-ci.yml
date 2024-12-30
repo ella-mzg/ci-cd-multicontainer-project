@@ -134,7 +134,7 @@ deploy:
     - apk add --no-cache openssh-client rsync
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
+    - chmod 400 ~/.ssh/id_rsa
     - ssh-keyscan -H $VM_HOST >> ~/.ssh/known_hosts
     - chmod +x deploy.sh
     - echo "Using VM_USER=$VM_USER and VM_HOST=$VM_HOST"

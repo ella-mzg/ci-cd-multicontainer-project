@@ -17,6 +17,7 @@ rsync -avz --exclude='.git/' --exclude='node_modules/' --exclude='venv/' ./ "$VM
 }
 
 echo "Connecting to $VM_USER@$VM_HOST to start deployment..."
+cat ~/.ssh/id_rsa
 ssh -i ~/.ssh/id_rsa "$VM_USER@$VM_HOST" << EOF
 set -e
 cd $TARGET_DIR || { echo "Project directory not found"; exit 1; }
