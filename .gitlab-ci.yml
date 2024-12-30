@@ -131,10 +131,12 @@ deploy:
   stage: deploy
   image: alpine:latest
   before_script:
+    - echo $VM_USER
+    - echo $VM_IP
     - apk add --no-cache openssh-client rsync
-    - mkdir -p ~/.ssh
-    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - chmod 600 ~/.ssh/id_rsa
+    # - mkdir -p ~/.ssh
+    # - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    # - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -H $VM_IP >> ~/.ssh/known_hosts
   script:
     - VM_USER=$VM_USER VM_IP=$VM_IP ./deploy.sh
