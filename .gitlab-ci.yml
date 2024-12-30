@@ -136,6 +136,7 @@ deploy:
     - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -H $VM_HOST >> ~/.ssh/known_hosts
+    - chmod +x deploy.sh
   script:
     - VM_USER=$VM_USER VM_HOST=$VM_HOST ./deploy.sh
   only:
