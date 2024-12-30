@@ -1,7 +1,7 @@
 VM_USER="${VM_USER:-}"
 VM_HOST="${VM_HOST:-}"
 PROJECT_NAME= "ci-cd-multicontainer-project"
-TARGET_DIR="/home/$VM_USER/code/$PROJECT_NAME"
+TARGET_DIR="/home/$VM_USER/$PROJECT_NAME"
 
 if [ -z "$VM_HOST" ]; then
     echo "VM_HOST is not set. Exiting."
