@@ -107,7 +107,7 @@ sast:
         - backend/**/*
         - frontend/**/*
         - database/**/*
-    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+    # - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
 
 # ----------- DEPLOY JOBS -----------
 pages:
@@ -125,21 +125,19 @@ pages:
   rules:
     - changes:
         - docs/**
-    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
+    # - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
 
 deploy:
   stage: deploy
   image: alpine:latest
   before_script:
-    - echo $VM_USER
-    - echo $VM_IP
     - apk add --no-cache openssh-client rsync
-    # - mkdir -p ~/.ssh
-    # - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-    # - chmod 600 ~/.ssh/id_rsa
-    - ssh-keyscan -H $VM_IP >> ~/.ssh/known_hosts
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H $VM_HOST >> ~/.ssh/known_hosts
   script:
-    - VM_USER=$VM_USER VM_IP=$VM_IP ./deploy.sh
+    - VM_USER=$VM_USER VM_HOST=$VM_HOST ./deploy.sh
   only:
     - main
     - feat/17-vm-deployment
