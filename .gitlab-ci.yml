@@ -137,7 +137,7 @@ deploy:
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -H $VM_HOST >> ~/.ssh/known_hosts
     - chmod +x deploy.sh
-    - echo $VM_USER
+    - echo "Using VM_USER=$VM_USER and VM_HOST=$VM_HOST"
   script:
     - VM_USER=$VM_USER VM_HOST=$VM_HOST ./deploy.sh
   only:
