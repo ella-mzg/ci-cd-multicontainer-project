@@ -112,7 +112,7 @@ sast:
 # ----------- DEPLOY JOBS -----------
 pages:
   stage: deploy
-  image: python:3.12
+  image: python:3.12-slim
   before_script:
     - pip install --no-cache-dir mkdocs mkdocs-material
   script:
@@ -123,13 +123,21 @@ pages:
       - public
     expire_in: 1 week
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
     - changes:
         - docs/**
+    - if: '$CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "merge_request_event"'
 
 deploy:
   stage: deploy
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache openssh-client rsync
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H $VM_IP >> ~/.ssh/known_hosts
   script:
-    - echo "Deploy services"
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
+    - VM_USER=$VM_USER VM_IP=$VM_IP ./deploy.sh
+  only:
+    - main
+    - feat/17-vm-deployment
