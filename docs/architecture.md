@@ -54,7 +54,6 @@
   - `POST /api/tasks`: Add a new task.
   - `PUT /api/tasks/<task_id>`: Update a task (e.g., toggle completion).
   - `DELETE /api/tasks/<task_id>`: Delete a task.
-  - `GET /api/health`: Health check endpoint.
 - **Integration**:
   - Interfaces with PostgreSQL using **SQLAlchemy** for ORM.
   - Returns JSON responses for frontend consumption.
