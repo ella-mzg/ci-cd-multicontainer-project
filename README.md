@@ -104,6 +104,8 @@ docker-compose up --build -d
 
 Open your browser and visit `http://localhost/` (or `http://<PUBLIC_VM_IP>/` if deployed on a VM).
 
+You can watch a [demonstration of successful deployment to the VM](https://supdevinci-my.sharepoint.com/:v:/g/personal/ella_mzoughi_supdevinci-edu_fr/EelizM3czSJLuXAwZTmE44kBCw-dgaXm3iI9Yh2hxQ0pNw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=Ptc0RJ) in this video.
+
 ### Manually
 
 #### Database Setup
