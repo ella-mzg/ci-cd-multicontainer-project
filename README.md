@@ -16,11 +16,9 @@ This is a simple TODO app that allows users to manage their tasks. Users can:
 
 ## Architecture Overview
 
-The app follows a three-tier architecture, consisting of a **frontend**, **backend**, and **database**.
+The app follows a three-tier architecture, consisting of a **frontend**, **backend**, and **database** with NGINX as a reverse proxy to streamline communication between components.
 
 ### Components
-
----
 
 1. **Frontend**
 
@@ -39,34 +37,36 @@ The app follows a three-tier architecture, consisting of a **frontend**, **backe
      - `DELETE /api/tasks/<task_id>`: Delete a task.
 
 3. **Database**
+
    - Uses **PostgreSQL** for persistent data storage.
    - Stores task information, including:
      - `id` (integer): Unique identifier.
      - `title` (string): Description of the task.
      - `completed` (boolean): Task status.
 
-### Communication Flow
+4. **Reverse Proxy**
 
----
+   - NGINX Acts as a single entry point for the application when running with Docker Compose.
+   - Simplifies frontend-backend communication by avoiding hardcoded URLs.
+   - Routes incoming requests to the appropriate service:
+     - `/`: Proxies requests to the frontend.
+     - `/backend`: Proxies API requests to the backend.
 
-1. **User Interaction**:
+### **Communication Flow**
 
-   - Users interact with the frontend to perform actions like adding or toggling tasks.
+1. **User Interaction**  
+   Users interact with the **frontend** to add, update, or delete tasks.
 
-2. **API Requests**:
+2. **API Requests**  
+   The **frontend** sends requests to the **backend** Flask API via NGINX.
 
-   - The frontend sends HTTP requests to the backend Flask API.
+3. **Database Operations**  
+   The **backend** interacts with the **PostgreSQL** database to handle CRUD operations.
 
-3. **Database Operations**:
-
-   - The backend performs CRUD operations on the PostgreSQL database.
-
-4. **Response**:
-   - The backend returns JSON responses, which the frontend uses to update the user interface.
+4. **Response Handling**  
+   The **backend** sends responses back to the **frontend**, which updates the user interface accordingly.
 
 ### Why This Stack?
-
----
 
 This stack was chosen for its efficiency, reliability, and compatibility with my skill set. Additionally, the project provided an opportunity to combine technologies I’m familiar with (Python, Next.js, and PostgreSQL) while tackling new challenges, such as CI/CD pipelines and SAST integration.
 
@@ -74,55 +74,39 @@ This stack was chosen for its efficiency, reliability, and compatibility with my
 
 ### Prerequisites
 
----
-
 - **Python** with `pip`
 - **Node.js** with `npm` or `yarn`
 - **PostgreSQL**
 
 Note: The application has been tested with Node.js v20.10, Python v3.12, and PostgreSQL v16.1. Any recent version should work.
 
-**Create a .env file in the root directory with the following variables:**
-
-```bash
-BACKEND_HOST=localhost
-BACKEND_PORT=5000
-
-FRONTEND_HOST=localhost
-FRONTEND_PORT=3000
-
-NEXT_PUBLIC_BACKEND_URL=http://localhost:5000
-DATABASE_URL=postgresql+psycopg2://user:password@localhost:5432/mydb
-FRONTEND_URL=http://localhost:3000
-```
-
 ### With Docker Compose
 
 - **Start the containers**:
 
 ```bash
-docker compose up -d
+docker-compose up -d
 ```
 
 - **Stop the Containers**:
 
 ```bash
-docker compose down
+docker-compose down
 ```
 
 - **Rebuild Services (if needed)**:
 
 ```bash
-docker compose up --build -d
+docker-compose up --build -d
 ```
+
+- **Access the Application**
+
+Open your browser and visit `http://localhost/` (or `http://<PUBLIC_VM_IP>/` if deployed on a VM).
 
 ### Manually
 
----
-
 #### Database Setup
-
----
 
 **1. Create and seed the database**
 
@@ -134,11 +118,23 @@ docker compose up --build -d
 
 - **Using pgAdmin or other tools**:
 
-  Create the database through the GUI and paste the contents of init.sql.
+  Create the database through the GUI and paste the contents of init.sql in your query tool to initialize it.
+
+#### Variables Setup
+
+**Create a .env file in the project root directory with the following values:**
+
+```bash
+# Database connection string (do not use if running tests, deployed app, or Docker Compose):
+DATABASE_URL=postgresql+psycopg2://postgres:password@localhost:5432/mydb
+
+# Override the backend port (default is 5000):
+BACKEND_PORT=5001
+
+# Frontend will run on 3000 by default, but Next.js dynamically chooses another port if unavailable.
+```
 
 #### Backend Setup
-
----
 
 **1. Navigate to the Backend Directory**
 
@@ -181,8 +177,6 @@ python app.py
 
 #### Frontend Setup
 
----
-
 **1. Open another terminal and navigate to the frontend directory**
 
 ```bash
@@ -201,11 +195,11 @@ npm i # Or yarn
 npm run dev # Or yarn dev
 ```
 
-### Access the Application
+#### Access the Application
+
+Once both the backend and frontend are running, open your browser and visit `http://localhost:3000/` (or the port dynamically chosen by Next.js).
 
 ---
-
-Open your browser and visit http://localhost:3000 (or the URL you set in your environment variables).
 
 ## Team Roles and Contributions
 

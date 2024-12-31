@@ -2,8 +2,7 @@
 
 To further enhance the project and improve its security, efficiency, and maintainability, here are some ideas for improvement:
 
-- **DNS Management**: Implement Traefik or a similar solution to streamline DNS resolution across environments.
-- **Environment Modes**: Simplify switching between development and production modes to minimize manual configuration.
+- **Environment Modes**: Simplify switching between development and production modes to minimize manual configuration. Update the application logic to detect the current environment and load appropriate settings dynamically.
 - **Security Enhancements**:
   - Add server-side validation to ensure data integrity.
   - Secure PostgreSQL secrets by moving them out of project files and into a dedicated secret management system.
