@@ -22,41 +22,39 @@ services:
     build:
       context: ./backend
     environment:
-      SERVICE_HOST: ${BACKEND_HOST}
-      SERVICE_PORT: ${BACKEND_PORT}
-      FRONTEND_URL: ${FRONTEND_URL}
+      DATABASE_URL: "postgresql+psycopg2://user:password@db:5432/mydb"
       POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
     secrets:
       - postgres_password
     depends_on:
       db:
         condition: service_healthy
-    ports:
-      - "${BACKEND_PORT}:${BACKEND_PORT}"
     networks:
       - app_net
-    healthcheck:
-      test: ["CMD", "python", "/app/healthcheck.py"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
 
   frontend:
     build:
       context: ./frontend
     environment:
-      SERVICE_HOST: ${FRONTEND_HOST}
-      SERVICE_PORT: ${FRONTEND_PORT}
-      NEXT_PUBLIC_BACKEND_URL: ${NEXT_PUBLIC_BACKEND_URL}
+      NEXT_PUBLIC_BACKEND_URL: /backend
     ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+      - "3000:3000"
+    depends_on:
+      - backend
     networks:
       - app_net
-    healthcheck:
-      test: ["CMD", "node", "/app/healthcheck.js"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - app_net
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf:ro
 
 volumes:
   db_data: {}

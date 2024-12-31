@@ -6,22 +6,7 @@ All endpoints are prefixed with `/api`.
 
 ---
 
-## 1. Health Check
-
-- **URL**: `/api/health`
-- **Method**: `GET`
-- **Description**: Verifies that the API is running and healthy.
-- **Response**:
-  - **200 OK**:
-    ```json
-    {
-      "status": "healthy"
-    }
-    ```
-
----
-
-## 2. Get All Tasks
+## 1. Get All Tasks
 
 - **URL**: `/api/tasks`
 - **Method**: `GET`
@@ -45,7 +30,7 @@ All endpoints are prefixed with `/api`.
 
 ---
 
-## 3. Create a Task
+## 2. Create a Task
 
 - **URL**: `/api/tasks`
 - **Method**: `POST`
@@ -69,7 +54,7 @@ All endpoints are prefixed with `/api`.
 
 ---
 
-## 4. Update a Task
+## 3. Update a Task
 
 - **URL**: `/api/tasks/<task_id>`
 - **Method**: `PUT`
@@ -102,7 +87,7 @@ All endpoints are prefixed with `/api`.
 
 ---
 
-## 5. Delete a Task
+## 4. Delete a Task
 
 - **URL**: `/api/tasks/<task_id>`
 - **Method**: `DELETE`

@@ -3,10 +3,6 @@ from models import db, Task
 
 task_blueprint = Blueprint("tasks", __name__)
 
-@task_blueprint.route("/api/health", methods=["GET"])
-def health():
-    return jsonify({"status": "healthy"}), 200
-
 @task_blueprint.route("/api/tasks", methods=["GET"])
 def get_tasks():
     tasks = Task.query.all()
