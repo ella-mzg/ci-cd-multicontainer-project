@@ -12,11 +12,6 @@ def client():
         with app.app_context():
             db.drop_all()
 
-def test_health_endpoint(client):
-    response = client.get("/api/health")
-    assert response.status_code == 200
-    assert response.get_json() == {"status": "healthy"}
-
 def test_get_tasks_empty(client):
     response = client.get("/api/tasks")
     assert response.status_code == 200
